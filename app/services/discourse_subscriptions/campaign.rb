@@ -144,7 +144,7 @@ module DiscourseSubscriptions
       plan = ::Stripe::Price.create(price_object)
     end
 
-    def get_one_time_payments(product_ids)
+    def get_one_time_payments(product_ids, referral_id = nil)
       one_time_payments = []
       current_set = { has_more: true, last_record: nil }
 
@@ -171,6 +171,7 @@ module DiscourseSubscriptions
                     customer_id: customer_id,
                     product_id: product_id,
                     price: line_item[:price][:unit_amount],
+                    metadata: { promotekit_referral: referral_id },
                   }
                   one_time_payments << line_data
                 end

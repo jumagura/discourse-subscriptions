@@ -88,7 +88,7 @@ module DiscourseSubscriptions
           subscription_params = {
             customer: customer[:id],
             items: [{ price: params[:plan] }],
-            metadata: metadata_user,
+            metadata: metadata_user.merge({ promotekit_referral: params[:promotekit_referral] }),
             trial_period_days: trial_days,
             promotion_code: promo_code_id,
           }
