@@ -59,6 +59,7 @@ module DiscourseSubscriptions
 
     def create
       params.require(%i[source plan])
+      referral_id = cookies[:promotekit_referral]
       begin
         customer =
           find_or_create_customer(
@@ -81,14 +82,14 @@ module DiscourseSubscriptions
 
         if recurring_plan
           trial_days = plan[:metadata][:trial_period_days] if plan[:metadata] &&
-            plan[:metadata][:trial_period_days]
+                                                              plan[:metadata][:trial_period_days]
 
           promo_code_id = promo_code[:id] if promo_code
 
           subscription_params = {
             customer: customer[:id],
             items: [{ price: params[:plan] }],
-            metadata: metadata_user.merge({ promotekit_referral: params[:promotekit_referral] }),
+            metadata: metadata_user.merge({ promotekit_referral: referral_id }),
             trial_period_days: trial_days,
             promotion_code: promo_code_id,
           }
@@ -104,7 +105,7 @@ module DiscourseSubscriptions
           ] == "incomplete"
         else
           coupon_id = promo_code[:coupon][:id] if promo_code && promo_code[:coupon] &&
-            promo_code[:coupon][:id]
+                                                  promo_code[:coupon][:id]
 
           invoice_params = { customer: customer[:id] }
           if SiteSetting.discourse_subscriptions_enable_automatic_tax
@@ -121,14 +122,12 @@ module DiscourseSubscriptions
             )
           transaction = ::Stripe::Invoice.finalize_invoice(invoice[:id])
           payment_intent = retrieve_payment_intent(transaction[:id]) if transaction[:status] ==
-            "open"
+                                                                        "open"
           if payment_intent.nil?
-            return(
-              render_json_error I18n.t("js.discourse_subscriptions.subscribe.transaction_error")
-            )
+            return(render_json_error I18n.t("js.discourse_subscriptions.subscribe.transaction_error"))
           end
           transaction = ::Stripe::Invoice.pay(invoice[:id]) if payment_intent[:status] ==
-            "successful"
+                                                               "successful"
         end
 
         finalize_transaction(transaction, plan) if transaction_ok(transaction)
@@ -212,19 +211,17 @@ module DiscourseSubscriptions
     def find_or_create_customer(source, cardholder_name = nil, cardholder_address = nil)
       customer = Customer.find_by_user_id(current_user.id)
       cardholder_address =
-        (
-          if cardholder_address.present?
-            {
-              line1: cardholder_address[:line1],
-              city: cardholder_address[:city],
-              state: cardholder_address[:state],
-              country: cardholder_address[:country],
-              postal_code: cardholder_address[:postalCode],
-            }
-          else
-            nil
-          end
-        )
+        (if cardholder_address.present?
+          {
+            line1: cardholder_address[:line1],
+            city: cardholder_address[:city],
+            state: cardholder_address[:state],
+            country: cardholder_address[:country],
+            postal_code: cardholder_address[:postalCode],
+          }
+        else
+          nil
+        end)
 
       if customer.present?
         ::Stripe::Customer.retrieve(customer.customer_id)

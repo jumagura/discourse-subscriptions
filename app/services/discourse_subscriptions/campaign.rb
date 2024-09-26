@@ -3,6 +3,7 @@
 module DiscourseSubscriptions
   class Campaign
     include DiscourseSubscriptions::Stripe
+
     def initialize
       set_api_key # instantiates Stripe API
     end
@@ -144,9 +145,11 @@ module DiscourseSubscriptions
       plan = ::Stripe::Price.create(price_object)
     end
 
-    def get_one_time_payments(product_ids, referral_id = nil)
+    def get_one_time_payments(product_ids)
       one_time_payments = []
       current_set = { has_more: true, last_record: nil }
+
+      referral_id = cookies[:promotekit_referral]
 
       if product_ids.present?
         # lots of matching because the Stripe API doesn't make it easy to match products => payments except from invoices
@@ -164,7 +167,7 @@ module DiscourseSubscriptions
               line_item = invoice[:lines][:data][0] if invoice[:lines] && invoice[:lines][:data] # Discourse only makes single-line item charges
               # check if non-subscription and that the plan is active
               if line_item && line_item[:plan] == nil && line_item[:price] &&
-                   line_item[:price][:recurring] == nil && line_item[:price][:active] == true
+                 line_item[:price][:recurring] == nil && line_item[:price][:active] == true
                 product_id = line_item[:price][:product]
                 if product_ids.include? product_id
                   line_data = {

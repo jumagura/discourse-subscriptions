@@ -51,7 +51,7 @@ export default Controller.extend({
     return true;
   },
 
-  createSubscription(plan, promotekitReferral) {
+  createSubscription(plan) {
     return this.stripe
       .createToken(this.get("cardElement"), {
         name: this.cardholderName, // Recommended by Stripe
@@ -72,7 +72,6 @@ export default Controller.extend({
             promo: this.promoCode,
             cardholderName: this.cardholderName,
             cardholderAddress: this.cardholderAddress,
-            promotekitReferral: promotekitReferral,
           });
 
           return subscription.save();
@@ -158,8 +157,7 @@ export default Controller.extend({
         return;
       }
 
-      const promotekitReferral = window.promotekit_referral || null;
-      let transaction = this.createSubscription(plan, promotekitReferral);
+      let transaction = this.createSubscription(plan);
 
       transaction
         .then((result) => {
