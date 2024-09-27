@@ -149,8 +149,6 @@ module DiscourseSubscriptions
       one_time_payments = []
       current_set = { has_more: true, last_record: nil }
 
-      referral_id = cookies[:promotekit_referral]
-
       if product_ids.present?
         # lots of matching because the Stripe API doesn't make it easy to match products => payments except from invoices
         until current_set[:has_more] == false
@@ -174,7 +172,6 @@ module DiscourseSubscriptions
                     customer_id: customer_id,
                     product_id: product_id,
                     price: line_item[:price][:unit_amount],
-                    metadata: { promotekit_referral: referral_id },
                   }
                   one_time_payments << line_data
                 end

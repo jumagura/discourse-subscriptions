@@ -59,7 +59,6 @@ module DiscourseSubscriptions
 
     def create
       params.require(%i[source plan])
-      referral_id = cookies[:promotekit_referral]
       begin
         customer =
           find_or_create_customer(
@@ -89,7 +88,7 @@ module DiscourseSubscriptions
           subscription_params = {
             customer: customer[:id],
             items: [{ price: params[:plan] }],
-            metadata: metadata_user.merge({ promotekit_referral: referral_id }),
+            metadata: metadata_user,
             trial_period_days: trial_days,
             promotion_code: promo_code_id,
           }
