@@ -222,15 +222,23 @@ module DiscourseSubscriptions
         else
           nil
         end)
-
+      cookie_content = cookies[:'rewardful.referral']
+      if cookie_content.present?
+        decoded_content = CGI.unescape(cookie_content)
+        parsed_data = JSON.parse(decoded_content)
+        referral_id = parsed_data["id"]
+      end
       if customer.present?
         ::Stripe::Customer.retrieve(customer.customer_id)
       else
+        metadata = {}
+        metadata[:rewardful_referral] = referral_id if referral_id.present?
         ::Stripe::Customer.create(
           email: current_user.email,
           source: source,
           name: cardholder_name,
           address: cardholder_address,
+          metadata: metadata,
         )
       end
     end

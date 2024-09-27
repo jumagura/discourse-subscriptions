@@ -40,7 +40,15 @@ module DiscourseSubscriptions
         return render_json_error "email not found" if !email
 
         if checkout_session[:customer].nil?
-          customer = ::Stripe::Customer.create({ email: email })
+          cookie_content = cookies[:'rewardful.referral']
+          if cookie_content.present?
+            decoded_content = CGI.unescape(cookie_content)
+            parsed_data = JSON.parse(decoded_content)
+            referral_id = parsed_data["id"]
+          end
+          metadata = {}
+          metadata[:rewardful_referral] = referral_id if referral_id.present?
+          customer = ::Stripe::Customer.create({ email: email, metadata: metadata })
           customer_id = customer[:id]
         else
           customer_id = checkout_session[:customer]
