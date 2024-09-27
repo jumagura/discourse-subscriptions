@@ -231,7 +231,7 @@ module DiscourseSubscriptions
         ::Stripe::Customer.retrieve(customer.customer_id)
       else
         metadata = {}
-        metadata[:rewardful_referral] = referral_id if referral_id.present?
+        metadata[:referral] = referral_id if referral_id.present?
         ::Stripe::Customer.create(
           email: current_user.email,
           source: source,
