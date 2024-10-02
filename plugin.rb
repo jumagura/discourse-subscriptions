@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-# name: discourse-subscriptions
+# name: jumagura-discourse-subscriptions
 # about: Allows admins to sell subscriptions to site content.
 # meta_topic_id: 140818
 # version: 2.8.1
@@ -39,8 +39,7 @@ Discourse::Application.routes.append do
       :constraints => AdminConstraint.new
   get "/admin/plugins/discourse-subscriptions/products/:product_id/plans" => "admin/plugins#index",
       :constraints => AdminConstraint.new
-  get "/admin/plugins/discourse-subscriptions/products/:product_id/plans/:plan_id" =>
-        "admin/plugins#index",
+  get "/admin/plugins/discourse-subscriptions/products/:product_id/plans/:plan_id" => "admin/plugins#index",
       :constraints => AdminConstraint.new
   get "/admin/plugins/discourse-subscriptions/subscriptions" => "admin/plugins#index",
       :constraints => AdminConstraint.new
