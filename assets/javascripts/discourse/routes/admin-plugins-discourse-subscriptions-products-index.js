@@ -2,7 +2,7 @@ import { action } from "@ember/object";
 import Route from "@ember/routing/route";
 import { inject as service } from "@ember/service";
 import I18n from "I18n";
-import AdminProduct from "discourse/plugins/discourse-subscriptions/discourse/models/admin-product";
+import AdminProduct from "../models/admin-product";
 
 export default Route.extend({
   dialog: service(),

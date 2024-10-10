@@ -1,5 +1,5 @@
 import Route from "@ember/routing/route";
-import AdminPlan from "discourse/plugins/discourse-subscriptions/discourse/models/admin-plan";
+import AdminPlan from "../models/admin-plan";
 
 export default Route.extend({
   model() {

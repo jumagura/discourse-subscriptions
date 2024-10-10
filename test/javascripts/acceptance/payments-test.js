@@ -1,7 +1,7 @@
 import { visit } from "@ember/test-helpers";
 import { test } from "qunit";
 import { acceptance, count } from "discourse/tests/helpers/qunit-helpers";
-import { stubStripe } from "discourse/plugins/discourse-subscriptions/helpers/stripe";
+import { stubStripe } from "../helpers/stripe";
 
 acceptance("Subscriptions", function (needs) {
   needs.user();

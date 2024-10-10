@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-# name: jumagura-discourse-subscriptions
+# name: discourse-subscriptions
 # about: Allows admins to sell subscriptions to site content.
 # meta_topic_id: 140818
 # version: 2.8.2
@@ -58,7 +58,7 @@ Discourse::Application.routes.append do
 end
 
 module ::DiscourseSubscriptions
-  PLUGIN_NAME = "discourse-subscriptions"
+  PLUGIN_NAME = "jumagura-discourse-subscriptions"
 end
 
 require_relative "lib/discourse_subscriptions/engine"

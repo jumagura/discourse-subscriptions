@@ -1,5 +1,5 @@
 import { module, test } from "qunit";
-import Plan from "discourse/plugins/discourse-subscriptions/discourse/models/plan";
+import Plan from "../models/plan";
 
 module("Subscriptions | Unit | Model | plan", function () {
   test("subscriptionRate", function (assert) {

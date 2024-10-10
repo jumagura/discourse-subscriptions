@@ -1,6 +1,6 @@
 import { ajax } from "discourse/lib/ajax";
 import discourseComputed from "discourse-common/utils/decorators";
-import Plan from "discourse/plugins/discourse-subscriptions/discourse/models/plan";
+import Plan from "../models/plan";
 
 const AdminPlan = Plan.extend({
   isNew: false,

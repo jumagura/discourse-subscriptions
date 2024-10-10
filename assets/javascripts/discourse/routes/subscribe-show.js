@@ -1,7 +1,7 @@
 import Route from "@ember/routing/route";
-import Plan from "discourse/plugins/discourse-subscriptions/discourse/models/plan";
-import Product from "discourse/plugins/discourse-subscriptions/discourse/models/product";
-import Subscription from "discourse/plugins/discourse-subscriptions/discourse/models/subscription";
+import Plan from "../models/plan";
+import Product from "../models/product";
+import Subscription from "../models/subscription";
 
 export default Route.extend({
   model(params) {

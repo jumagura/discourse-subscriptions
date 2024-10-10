@@ -3,8 +3,8 @@ import Route from "@ember/routing/route";
 import { inject as service } from "@ember/service";
 import { hash } from "rsvp";
 import I18n from "I18n";
-import AdminPlan from "discourse/plugins/discourse-subscriptions/discourse/models/admin-plan";
-import AdminProduct from "discourse/plugins/discourse-subscriptions/discourse/models/admin-product";
+import AdminPlan from "../models/admin-plan";
+import AdminProduct from "../models/admin-product";
 
 export default Route.extend({
   dialog: service(),

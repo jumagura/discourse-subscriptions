@@ -1,6 +1,6 @@
 import Controller from "@ember/controller";
 import { popupAjaxError } from "discourse/lib/ajax-error";
-import AdminCoupon from "discourse/plugins/discourse-subscriptions/discourse/models/admin-coupon";
+import AdminCoupon from "../models/admin-coupon";
 
 export default Controller.extend({
   creating: null,
