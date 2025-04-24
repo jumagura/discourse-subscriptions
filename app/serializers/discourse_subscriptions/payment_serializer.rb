@@ -53,6 +53,12 @@ module DiscourseSubscriptions
         "S$"
       when "zar"
         "R"
+      when "chf"
+        "CHF"
+      when "pln"
+        "zł"
+      when "czk"
+        "Kč"
       else
         "$"
       end

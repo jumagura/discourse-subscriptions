@@ -1,37 +1,10 @@
 import EmberObject from "@ember/object";
 import { ajax } from "discourse/lib/ajax";
-import getURL from "discourse-common/lib/get-url";
-import discourseComputed from "discourse-common/utils/decorators";
+import discourseComputed from "discourse/lib/decorators";
+import getURL from "discourse/lib/get-url";
 
-const AdminSubscription = EmberObject.extend({
-  @discourseComputed("status")
-  canceled(status) {
-    return status === "canceled";
-  },
-
-  @discourseComputed("metadata")
-  metadataUserExists(metadata) {
-    return metadata.user_id && metadata.username;
-  },
-
-  @discourseComputed("metadata")
-  subscriptionUserPath(metadata) {
-    return getURL(`/admin/users/${metadata.user_id}/${metadata.username}`);
-  },
-
-  destroy(refund) {
-    const data = {
-      refund,
-    };
-    return ajax(`/s/admin/subscriptions/${this.id}`, {
-      method: "delete",
-      data,
-    }).then((result) => AdminSubscription.create(result));
-  },
-});
-
-AdminSubscription.reopenClass({
-  find() {
+export default class AdminSubscription extends EmberObject {
+  static find() {
     return ajax("/s/admin/subscriptions", {
       method: "get",
     }).then((result) => {
@@ -43,8 +16,9 @@ AdminSubscription.reopenClass({
       );
       return result;
     });
-  },
-  loadMore(lastRecord) {
+  }
+
+  static loadMore(lastRecord) {
     return ajax(`/s/admin/subscriptions?last_record=${lastRecord}`, {
       method: "get",
     }).then((result) => {
@@ -53,7 +27,30 @@ AdminSubscription.reopenClass({
       );
       return result;
     });
-  },
-});
+  }
 
-export default AdminSubscription;
+  @discourseComputed("status")
+  canceled(status) {
+    return status === "canceled";
+  }
+
+  @discourseComputed("metadata")
+  metadataUserExists(metadata) {
+    return metadata.user_id && metadata.username;
+  }
+
+  @discourseComputed("metadata")
+  subscriptionUserPath(metadata) {
+    return getURL(`/admin/users/${metadata.user_id}/${metadata.username}`);
+  }
+
+  destroy(refund) {
+    const data = {
+      refund,
+    };
+    return ajax(`/s/admin/subscriptions/${this.id}`, {
+      method: "delete",
+      data,
+    }).then((result) => AdminSubscription.create(result));
+  }
+}

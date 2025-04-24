@@ -1,13 +1,13 @@
 import Route from "@ember/routing/route";
-import { inject as service } from "@ember/service";
+import { service } from "@ember/service";
 import Product from "../models/product";
 
-export default Route.extend({
-  router: service(),
+export default class SubscribeIndexRoute extends Route {
+  @service router;
 
   model() {
     return Product.findAll();
-  },
+  }
 
   afterModel(products) {
     if (products.length === 1) {
@@ -22,5 +22,5 @@ export default Route.extend({
         this.router.transitionTo("subscribe.show", product.id);
       }
     }
-  },
-});
+  }
+}

@@ -1,14 +1,15 @@
 import Controller from "@ember/controller";
 import { action } from "@ember/object";
-import { inject as service } from "@ember/service";
-import I18n from "discourse-i18n";
+import { service } from "@ember/service";
+import { i18n } from "discourse-i18n";
 import AdminCancelSubscription from "../components/modal/admin-cancel-subscription";
 import AdminSubscription from "../models/admin-subscription";
 
-export default Controller.extend({
-  modal: service(),
-  dialog: service(),
-  loading: false,
+export default class AdminPluginsDiscourseSubscriptionsSubscriptionsController extends Controller {
+  @service modal;
+  @service dialog;
+
+  loading = false;
 
   @action
   showCancelModal(subscription) {
@@ -18,7 +19,7 @@ export default Controller.extend({
         cancelSubscription: this.cancelSubscription,
       },
     });
-  },
+  }
 
   @action
   loadMore() {
@@ -34,7 +35,7 @@ export default Controller.extend({
         }
       );
     }
-  },
+  }
 
   @action
   cancelSubscription(model) {
@@ -47,7 +48,7 @@ export default Controller.extend({
       .destroy(refund)
       .then((result) => {
         subscription.set("status", result.status);
-        this.dialog.alert(I18n.t("discourse_subscriptions.admin.canceled"));
+        this.dialog.alert(i18n("discourse_subscriptions.admin.canceled"));
       })
       .catch((data) =>
         this.dialog.alert(data.jqXHR.responseJSON.errors.join("\n"))
@@ -56,5 +57,5 @@ export default Controller.extend({
         subscription.set("loading", false);
         closeModal();
       });
-  },
-});
+  }
+}

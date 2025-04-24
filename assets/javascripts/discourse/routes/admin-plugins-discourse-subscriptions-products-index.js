@@ -1,20 +1,20 @@
 import { action } from "@ember/object";
 import Route from "@ember/routing/route";
-import { inject as service } from "@ember/service";
-import I18n from "I18n";
+import { service } from "@ember/service";
+import { i18n } from "discourse-i18n";
 import AdminProduct from "../models/admin-product";
 
-export default Route.extend({
-  dialog: service(),
+export default class AdminPluginsDiscourseSubscriptionsProductsIndexRoute extends Route {
+  @service dialog;
 
   model() {
     return AdminProduct.findAll();
-  },
+  }
 
   @action
   destroyProduct(product) {
     this.dialog.yesNoConfirm({
-      message: I18n.t(
+      message: i18n(
         "discourse_subscriptions.admin.products.operations.destroy.confirm"
       ),
       didConfirm: () => {
@@ -32,5 +32,5 @@ export default Route.extend({
           );
       },
     });
-  },
-});
+  }
+}

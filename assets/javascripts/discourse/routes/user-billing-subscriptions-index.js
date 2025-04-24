@@ -1,24 +1,26 @@
 import { action } from "@ember/object";
 import Route from "@ember/routing/route";
-import { inject as service } from "@ember/service";
-import I18n from "I18n";
+import { service } from "@ember/service";
+import { i18n } from "discourse-i18n";
 import UserSubscription from "../models/user-subscription";
 
-export default Route.extend({
-  dialog: service(),
-  router: service(),
+export default class UserBillingSubscriptionsIndexRoute extends Route {
+  @service dialog;
+  @service router;
+
   model() {
     return UserSubscription.findAll();
-  },
+  }
 
   @action
   updateCard(subscriptionId) {
     this.router.transitionTo("user.billing.subscriptions.card", subscriptionId);
-  },
+  }
+
   @action
   cancelSubscription(subscription) {
     this.dialog.yesNoConfirm({
-      message: I18n.t(
+      message: i18n(
         "discourse_subscriptions.user.subscriptions.operations.destroy.confirm"
       ),
       didConfirm: () => {
@@ -36,5 +38,5 @@ export default Route.extend({
           });
       },
     });
-  },
-});
+  }
+}

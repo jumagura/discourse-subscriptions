@@ -1,26 +1,26 @@
 /* global Stripe */
 import Controller from "@ember/controller";
 import { action } from "@ember/object";
-import { inject as service } from "@ember/service";
+import { service } from "@ember/service";
 import { ajax } from "discourse/lib/ajax";
 import { popupAjaxError } from "discourse/lib/ajax-error";
-import I18n from "I18n";
+import { i18n } from "discourse-i18n";
 
-export default Controller.extend({
-  dialog: service(),
+export default class UserBillingSubscriptionsCardController extends Controller {
+  @service dialog;
 
-  loading: false,
-  saved: false,
+  loading = false;
+  saved = false;
 
   init() {
-    this._super(...arguments);
+    super.init(...arguments);
     this.set(
       "stripe",
       Stripe(this.siteSettings.discourse_subscriptions_public_key)
     );
     const elements = this.get("stripe").elements();
     this.set("cardElement", elements.create("card", { hidePostalCode: true }));
-  },
+  }
 
   @action
   async updatePaymentMethod() {
@@ -34,7 +34,7 @@ export default Controller.extend({
 
     if (paymentMethodObject.error) {
       this.dialog.alert(
-        paymentMethodObject.error?.message || I18n.t("generic_error")
+        paymentMethodObject.error?.message || i18n("generic_error")
       );
       this.set("loading", false);
       return;
@@ -56,5 +56,5 @@ export default Controller.extend({
       this.set("loading", false);
       this.cardElement?.clear();
     }
-  },
-});
+  }
+}

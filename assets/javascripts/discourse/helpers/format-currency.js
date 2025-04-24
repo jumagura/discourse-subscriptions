@@ -25,6 +25,15 @@ export function formatCurrency([currency, amount]) {
     case "ZAR":
       currencySign = "R";
       break;
+    case "CHF":
+      currencySign = "CHF";
+      break;
+    case "PLN":
+      currencySign = "zł";
+      break;
+    case "CZK":
+      currencySign = "Kč";
+      break;
     default:
       currencySign = "$";
   }

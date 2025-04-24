@@ -1,13 +1,14 @@
 import { action } from "@ember/object";
 import Route from "@ember/routing/route";
-import { inject as service } from "@ember/service";
+import { service } from "@ember/service";
 import { hash } from "rsvp";
-import I18n from "I18n";
+import { i18n } from "discourse-i18n";
 import AdminPlan from "../models/admin-plan";
 import AdminProduct from "../models/admin-product";
 
-export default Route.extend({
-  dialog: service(),
+export default class AdminPluginsDiscourseSubscriptionsProductsShowRoute extends Route {
+  @service dialog;
+
   model(params) {
     const product_id = params["product-id"];
     let product;
@@ -21,12 +22,12 @@ export default Route.extend({
     }
 
     return hash({ plans, product });
-  },
+  }
 
   @action
   destroyPlan(plan) {
     this.dialog.yesNoConfirm({
-      message: I18n.t(
+      message: i18n(
         "discourse_subscriptions.admin.plans.operations.destroy.confirm"
       ),
       didConfirm: () => {
@@ -42,5 +43,5 @@ export default Route.extend({
           );
       },
     });
-  },
-});
+  }
+}
