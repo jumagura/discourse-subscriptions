@@ -432,6 +432,8 @@ en:
             active_help: Toggle this off until your product is ready for consumers.
             created_at: Created
             updated_at: Updated
+            allowed_groups: Allowed Groups
+            allowed_groups_help: Select the groups that can access this product. Leave empty to allow all users.
           product_help: Before customers can subscribe to your site, you need to create at least one product and an associated plan.
         plans:
           title: Pricing Plans
