@@ -30,15 +30,18 @@ module DiscourseSubscriptions
       def create
         begin
           create_params = product_params.merge!(type: "service")
-
           create_params.except!(:statement_descriptor) if params[:statement_descriptor].blank?
 
           product = ::Stripe::Product.create(create_params)
+          db_product = Product.create!(
+            external_id: product[:id],
+            group_ids: Array(params[:group_ids]).map(&:to_i),
+          )
 
-          Product.create(external_id: product[:id])
-
-          render_json_dump product
+          render_json_dump product.to_h.merge(group_ids: db_product.group_ids)
         rescue ::Stripe::InvalidRequestError => e
+          render_json_error e.message
+        rescue ActiveRecord::RecordInvalid => e
           render_json_error e.message
         end
       end
@@ -46,8 +49,8 @@ module DiscourseSubscriptions
       def show
         begin
           product = ::Stripe::Product.retrieve(params[:id])
-
-          render_json_dump product
+          db_product = Product.find_by(external_id: params[:id])
+          render_json_dump product.to_h.merge(group_ids: db_product&.group_ids || [])
         rescue ::Stripe::InvalidRequestError => e
           render_json_error e.message
         end
@@ -56,9 +59,13 @@ module DiscourseSubscriptions
       def update
         begin
           product = ::Stripe::Product.update(params[:id], product_params)
+          db_product = Product.find_by(external_id: params[:id])
+          db_product.update!(group_ids: Array(params[:group_ids]).map(&:to_i))
 
-          render_json_dump product
+          render_json_dump product.to_h.merge(group_ids: db_product.group_ids)
         rescue ::Stripe::InvalidRequestError => e
+          render_json_error e.message
+        rescue ActiveRecord::RecordInvalid => e
           render_json_error e.message
         end
       end

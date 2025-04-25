@@ -16,9 +16,14 @@ module DiscourseSubscriptions
         products = []
 
         if product_ids.present? && is_stripe_configured?
-          response = ::Stripe::Product.list({ ids: product_ids, active: true })
-
-          products = response[:data].map { |p| serialize_product(p) }
+          user_group_ids = current_user ? current_user.group_ids : []
+          product_ids = Product.where(external_id: product_ids).select do |product|
+            product.group_ids.empty? || (product.group_ids & user_group_ids).present?
+          end.map(&:external_id)
+          if product_ids.present?
+            response = ::Stripe::Product.list({ ids: product_ids, active: true })
+            products = response[:data].map { |p| serialize_product(p) }
+          end
         end
 
         render_json_dump products
