@@ -19,17 +19,19 @@ export default class AdminProduct extends EmberObject {
 
   isNew = false;
   metadata = {};
+  group_ids = [];
 
   destroy() {
     return ajax(`/s/admin/products/${this.id}`, { method: "delete" });
   }
 
-  save() {
+  save({ group_ids } = {}) {
     const data = {
       name: this.name,
       statement_descriptor: this.statement_descriptor,
       metadata: this.metadata,
       active: this.active,
+      group_ids,
     };
 
     return ajax("/s/admin/products", {
@@ -38,12 +40,13 @@ export default class AdminProduct extends EmberObject {
     }).then((product) => AdminProduct.create(product));
   }
 
-  update() {
+  update({ group_ids } = {}) {
     const data = {
       name: this.name,
       statement_descriptor: this.statement_descriptor,
       metadata: this.metadata,
       active: this.active,
+      group_ids,
     };
 
     return ajax(`/s/admin/products/${this.id}`, {
