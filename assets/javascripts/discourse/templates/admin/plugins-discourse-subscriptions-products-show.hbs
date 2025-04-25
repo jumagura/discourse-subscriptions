@@ -75,6 +75,21 @@
       {{i18n "discourse_subscriptions.admin.products.product.active_help"}}
     </div>
   </p>
+  <p class="field">
+    <label>
+      {{i18n "discourse_subscriptions.admin.products.product.allowed_groups"}}
+    </label>
+    <GroupChooser
+      @content={{this.availableGroups}}
+      @valueProperty="id"
+      @nameProperty="name"
+      @value={{this.selectedGroups}}
+      @onChange={{this.onChangeGroups}}
+    />
+    <div class="control-instructions">
+      {{i18n "discourse_subscriptions.admin.products.product.allowed_groups_help"}}
+    </div>
+  </p>
 </form>
 
 {{#unless this.model.product.isNew}}
