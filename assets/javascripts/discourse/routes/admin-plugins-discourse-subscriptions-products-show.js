@@ -15,13 +15,21 @@ export default class AdminPluginsDiscourseSubscriptionsProductsShowRoute extends
     let plans = [];
 
     if (product_id === "new") {
-      product = AdminProduct.create({ active: false, isNew: true });
+      product = AdminProduct.create({ active: false, isNew: true, group_ids: [] });
     } else {
-      product = AdminProduct.find(product_id);
+      product = AdminProduct.find(product_id).catch(() => {
+        return AdminProduct.create({ active: false, isNew: false, group_ids: [] });
+      });
       plans = AdminPlan.findAll({ product_id });
     }
 
     return hash({ plans, product });
+  }
+
+  setupController(controller, model) {
+    super.setupController(controller, model);
+    const groupIds = model.product?.group_ids || [];
+    controller.set("selectedGroups", groupIds);
   }
 
   @action
