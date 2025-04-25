@@ -3,7 +3,7 @@
 # name: discourse-subscriptions
 # about: Allows admins to sell subscriptions to site content.
 # meta_topic_id: 140818
-# version: 2.8.2
+# version: 2.9.0
 # url: https://github.com/discourse/discourse-subscriptions
 # authors: Rimian Perkins, Justin DiRose
 
